@@ -5,26 +5,26 @@ project_id = '901492054369'
 datasetId = "24617418"
 # client = bigquery.Client(project_id)
 
-def changeLabelsOnSingleTable(datasetId, tableId):
-  dataset = client.get_dataset(datasetId)
-  table_ref = dataset.table(tableId)
-  table = client.get_table(table_ref)
-  print(f"{datasetId}.{tableId} wordt aangepast.")
-  table.labels = dataset.labels
-  table = client.update_table(table, ["labels"])
-  print(f"\t{table.table_id} is updatet!")
+# def changeLabelsOnSingleTable(datasetId, tableId):
+#   dataset = client.get_dataset(datasetId)
+#   table_ref = dataset.table(tableId)
+#   table = client.get_table(table_ref)
+#   print(f"{datasetId}.{tableId} wordt aangepast.")
+#   table.labels = dataset.labels
+#   table = client.update_table(table, ["labels"])
+#   print(f"\t{table.table_id} is updatet!")
 
-def updateAllNoneLabeledTables(datasetId):
-  # datasetId = "24617418"
-  dataset = client.get_dataset(datasetId)
-  tables = list(client.list_tables(dataset))
-  for table in tables:
-    table_ref = dataset.table(table.table_id)
-    table = client.get_table(table_ref)
-    t_labels = table.labels
-    if t_labels == {}:
-      print(f"Adding labels to {table.table_id}")
-      changeLabelsOnSingleTable(dataset.dataset_id, table.table_id)
+# def updateAllNoneLabeledTables(datasetId):
+#   # datasetId = "24617418"
+#   dataset = client.get_dataset(datasetId)
+#   tables = list(client.list_tables(dataset))
+#   for table in tables:
+#     table_ref = dataset.table(table.table_id)
+#     table = client.get_table(table_ref)
+#     t_labels = table.labels
+#     if t_labels == {}:
+#       print(f"Adding labels to {table.table_id}")
+#       changeLabelsOnSingleTable(dataset.dataset_id, table.table_id)
 
 
 def run(event, context):
@@ -43,7 +43,7 @@ def run(event, context):
 
     # message = pubsub_message["resource"]["labels"]["dataset_id"]
     message = pubsub_message
-    message2 = dict(pubsub_message)["resource"]
+    # message2 = dict(pubsub_message)["resource"]
 
     print("Starting the function!")
     import time
@@ -56,6 +56,6 @@ def run(event, context):
 
     print("update the sheet")
     worksheet.update_acell("C5", f"Message: {message}")
-    worksheet.update_acell("C6", f"Message2: {message2}")
+    # worksheet.update_acell("C6", f"Message2: {message2}")
     # print(google.cloud.functions.Context)
 
