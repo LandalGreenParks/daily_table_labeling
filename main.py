@@ -43,6 +43,7 @@ def run(event, context):
 
     # message = pubsub_message["resource"]["labels"]["dataset_id"]
     message = pubsub_message
+    message2 = dict(pubsub_message)["resource"]
 
     print("Starting the function!")
     import time
@@ -55,5 +56,6 @@ def run(event, context):
 
     print("update the sheet")
     worksheet.update_acell("C5", f"Message: {message}")
+    worksheet.update_acell("C6", f"Message2: {message2}")
     # print(google.cloud.functions.Context)
 
