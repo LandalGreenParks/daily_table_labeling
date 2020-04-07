@@ -1,4 +1,5 @@
 import base64
+import json
 # from google.cloud import bigquery
 
 project_id = '901492054369'
@@ -41,9 +42,9 @@ def run(event, context):
     pubsub_message = base64.b64decode(event['data'])
 
 
-    # message = pubsub_message["resource"]["labels"]["dataset_id"]
-    message = pubsub_message
-    message2 = event
+    data = json.loads(pubsub_message)
+    message = data["resource"]["labels"]["dataset_id"]
+    message2 = data["protoPayload"]["resourceName"].split("/tables/")[1]
 
     print("Starting the function!")
     import time
@@ -55,7 +56,7 @@ def run(event, context):
     worksheet = gc.open('PubSub Monitor').sheet1
 
     print("update the sheet")
-    worksheet.update_acell("C5", f"Message: {message}")
-    worksheet.update_acell("C6", f"Message2: {message2}")
-    # print(google.cloud.functions.Context)
-
+    worksheet.update_acell("C5", f"DataSet: {message}")
+    worksheet.update_acell("C6", f"Table: {message2}")
+    
+    
