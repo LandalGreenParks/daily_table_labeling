@@ -38,7 +38,7 @@ def run(event, context):
     # changeLabelsOnSingleTable(datasetId)
 
     # pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+    pubsub_message = base64.b64decode(event['data'])
 
 
     # message = pubsub_message["resource"]["labels"]["dataset_id"]
