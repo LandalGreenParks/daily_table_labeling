@@ -41,7 +41,8 @@ def run(event, context):
 
 
 
-    message = pubsub_message["resource"]["labels"]["dataset_id"]
+    # message = pubsub_message["resource"]["labels"]["dataset_id"]
+    message = pubsub_message
 
     print("Starting the function!")
     import time
