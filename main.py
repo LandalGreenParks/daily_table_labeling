@@ -34,8 +34,9 @@ def run(event, context):
          context (google.cloud.functions.Context): Metadata for the event.
     """
 
-    updateAllNoneLabeledTables(datasetId)
+    # changeLabelsOnSingleTable(datasetId)
 
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     print(pubsub_message)
+    print(google.cloud.functions.Context)
 
