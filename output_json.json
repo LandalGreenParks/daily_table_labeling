@@ -1,0 +1,53 @@
+{
+    "insertId": "f9gvfpe13f6y",
+    "logName": "projects/landal-evolution-platform/logs/cloudaudit.googleapis.com%2Factivity",
+    "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "authenticationInfo": {
+            "principalEmail": "mark.tijssen@landal.com"
+        },
+        "authorizationInfo": [
+            {
+                "granted": true,
+                "permission": "bigquery.tables.create",
+                "resource": "projects/landal-evolution-platform/datasets/kc_sandbox",
+                "resourceAttributes": {}
+            }
+        ],
+        "metadata": {
+            "@type": "type.googleapis.com/google.cloud.audit.BigQueryAuditMetadata",
+            "tableCreation": {
+                "reason": "TABLE_INSERT_REQUEST",
+                "table": {
+                    "createTime": "2020-04-07T13:45:32.276Z",
+                    "schemaJson": "{\n  \"fields\": [{\n    \"name\": \"month\",\n    \"type\": \"STRING\",\n    \"mode\": \"NULLABLE\"\n  }, {\n    \"name\": \"description\",\n    \"type\": \"STRING\",\n    \"mode\": \"NULLABLE\"\n  }, {\n    \"name\": \"sku\",\n    \"type\": \"STRING\",\n    \"mode\": \"NULLABLE\"\n  }, {\n    \"name\": \"cost_after_credits\",\n    \"type\": \"FLOAT\",\n    \"mode\": \"NULLABLE\"\n  }]\n}",
+                    "tableName": "projects/landal-evolution-platform/datasets/kc_sandbox/tables/billing_info_mi_temp_1",
+                    "updateTime": "2020-04-07T13:45:32.365Z",
+                    "view": {
+                        "query": "SELECT\n  billing.invoice.month as month\n  , billing.service.description as description\n  , billing.sku.description as sku\n  , sum(billing.cost) + SUM(IFNULL((\n      SELECT\n        sum(c.amount)\n      FROM unnest(billing.credits) c), 0)) as cost_after_credits\n  \nFROM `landal-evolution-platform.kc_sandbox.gcp_billing_export_v1_00FDFF_CBF3C3_157CF3` as billing, \nUNNEST(labels) as labels\n\nWHERE labels.key = 'stakeholder' AND labels.value = 'mi'\n  \nGROUP BY 1,2,3\nORDER BY 4"
+                    }
+                }
+            }
+        },
+        "methodName": "google.cloud.bigquery.v2.TableService.InsertTable",
+        "requestMetadata": {
+            "callerIp": "77.163.229.190",
+            "callerSuppliedUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36,gzip(gfe)",
+            "destinationAttributes": {},
+            "requestAttributes": {}
+        },
+        "resourceName": "projects/landal-evolution-platform/datasets/kc_sandbox/tables/billing_info_mi_temp_1",
+        "serviceName": "bigquery.googleapis.com",
+        "status": {}
+    },
+    "receiveTimestamp": "2020-04-07T13:45:33.133425827Z",
+    "resource": {
+        "labels": {
+            "dataset_id": "kc_sandbox",
+            "project_id": "landal-evolution-platform"
+        },
+        "type": "bigquery_dataset"
+    },
+    "severity": "NOTICE",
+    "timestamp": "2020-04-07T13:45:32.401Z"
+}
