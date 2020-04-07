@@ -1,9 +1,9 @@
 import base64
-from google.cloud import bigquery
+# from google.cloud import bigquery
 
 project_id = '901492054369'
 datasetId = "24617418"
-client = bigquery.Client(project_id)
+# client = bigquery.Client(project_id)
 
 def changeLabelsOnSingleTable(datasetId, tableId):
   dataset = client.get_dataset(datasetId)
@@ -28,6 +28,7 @@ def updateAllNoneLabeledTables(datasetId):
 
 
 def run(event, context):
+    
     """Triggered from a message on a Cloud Pub/Sub topic.
     Args:
          event (dict): Event payload.
