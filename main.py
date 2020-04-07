@@ -38,6 +38,21 @@ def run(event, context):
     # changeLabelsOnSingleTable(datasetId)
 
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    print(pubsub_message)
+
+
+
+    message = pubsub_message["resource"]["labels"]["dataset_id"]
+
+    print("Starting the function!")
+    import time
+    import gspread
+    from oauth2client.client import GoogleCredentials
+    gc = gspread.authorize(GoogleCredentials.get_application_default())
+
+    print("Reading the sheet:")
+    worksheet = gc.open('PubSub Monitor').sheet1
+
+    print("update the sheet")
+    worksheet.update_acell("C5", f"Message: {message}")
     # print(google.cloud.functions.Context)
 
