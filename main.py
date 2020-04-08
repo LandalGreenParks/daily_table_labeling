@@ -14,13 +14,17 @@ gc = gspread.authorize(GoogleCredentials.get_application_default())
 
 
 def changeLabelsOnSingleTable(datasetId, tableId):
-  dataset = client.get_dataset(datasetId)
-  table_ref = dataset.table(tableId)
-  table = client.get_table(table_ref)
-  print(f"{datasetId}.{tableId} wordt aangepast.")
-  table.labels = dataset.labels
-  table = client.update_table(table, ["labels"])
-  print(f"\t{table.table_id} is updatet!")
+     dataset = client.get_dataset(datasetId)
+     table_ref = dataset.table(tableId)
+     table = client.get_table(table_ref)
+     if table.labels is None:
+          print(f"{datasetId}.{tableId} wordt aangepast.")
+          table.labels = dataset.labels
+          table = client.update_table(table, ["labels"])
+          print(f"\t{table.table_id} is updatet!")
+     else:
+          print("Tabel heeft al labels en wordt daarom niet opnieuw gezet!")
+
 
 # def updateAllNoneLabeledTables(datasetId):
 #   # datasetId = "24617418"
