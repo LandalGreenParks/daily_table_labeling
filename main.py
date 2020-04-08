@@ -1,19 +1,26 @@
 import base64
 import json
-# from google.cloud import bigquery
+from google.cloud import bigquery
 
 project_id = '901492054369'
-datasetId = "24617418"
-# client = bigquery.Client(project_id)
+# datasetId = "24617418"
+client = bigquery.Client(project_id)
 
-# def changeLabelsOnSingleTable(datasetId, tableId):
-#   dataset = client.get_dataset(datasetId)
-#   table_ref = dataset.table(tableId)
-#   table = client.get_table(table_ref)
-#   print(f"{datasetId}.{tableId} wordt aangepast.")
-#   table.labels = dataset.labels
-#   table = client.update_table(table, ["labels"])
-#   print(f"\t{table.table_id} is updatet!")
+import time
+import gspread
+from oauth2client.client import GoogleCredentials
+gc = gspread.authorize(GoogleCredentials.get_application_default())
+
+
+
+def changeLabelsOnSingleTable(datasetId, tableId):
+  dataset = client.get_dataset(datasetId)
+  table_ref = dataset.table(tableId)
+  table = client.get_table(table_ref)
+  print(f"{datasetId}.{tableId} wordt aangepast.")
+  table.labels = dataset.labels
+  table = client.update_table(table, ["labels"])
+  print(f"\t{table.table_id} is updatet!")
 
 # def updateAllNoneLabeledTables(datasetId):
 #   # datasetId = "24617418"
@@ -36,27 +43,23 @@ def run(event, context):
          context (google.cloud.functions.Context): Metadata for the event.
     """
 
-    # changeLabelsOnSingleTable(datasetId)
+    
 
     # pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     pubsub_message = base64.b64decode(event['data'])
 
 
     data = json.loads(pubsub_message)
-    message = data["resource"]["labels"]["dataset_id"]
-    message2 = data["protoPayload"]["resourceName"].split("/tables/")[1]
+    datasetId = data["resource"]["labels"]["dataset_id"]
+    tableId = data["protoPayload"]["resourceName"].split("/tables/")[1]
 
     print("Starting the function!")
-    import time
-    import gspread
-    from oauth2client.client import GoogleCredentials
-    gc = gspread.authorize(GoogleCredentials.get_application_default())
 
     print("Reading the sheet:")
     worksheet = gc.open('PubSub Monitor').sheet1
 
     print("update the sheet")
-    worksheet.update_acell("C5", f"DataSet: {message}")
-    worksheet.update_acell("C6", f"Table: {message2}")
+    worksheet.update_acell("C5", f"DataSet: {datasetId}")
+    worksheet.update_acell("C6", f"Table: {tableId}")
     
-    
+    changeLabelsOnSingleTable(datasetId, tableId)
