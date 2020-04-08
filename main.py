@@ -1,6 +1,6 @@
 import base64
 import json
-import bigquery
+# import bigquery
 
 project_id = '901492054369'
 # datasetId = "24617418"
