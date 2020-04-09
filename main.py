@@ -3,7 +3,7 @@ import json
 # from google.cloud import bigquery
 
 project_id = '901492054369'
-datasetId = "24617418"
+# datasetId = "24617418"
 # client = bigquery.Client(project_id)
 
 # def changeLabelsOnSingleTable(datasetId, tableId):
