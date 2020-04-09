@@ -24,7 +24,7 @@ def changeLabelsOnSingleTable(datasetId, tableId):
           table = client.update_table(table, ["labels"])
           print(f"\t{table.table_id} is updatet!")
           pushInfoToGsheet(sheetName, f"Dataset: {datasetId}", f"table: {tableId}")
-          print("logPushed to Google Sheets")
+          
      else:
           print(f"Tabel ({tableId}) heeft al labels en wordt daarom niet opnieuw gezet!")
 
@@ -43,13 +43,13 @@ def changeLabelsOnSingleTable(datasetId, tableId):
 
 def pushInfoToGsheet(sheetName, messageA, messageB=None, cellA="C5", cellB="C6"):
 
-     print("Reading the sheet:")
+     print(f"Reading and update the sheet: {sheetName}")
      worksheet = gc.open(sheetName).sheet1
 
-     print("update the sheet")
+     # print("update the sheet")
      worksheet.update_acell(cellA, f"{messageA}")
      worksheet.update_acell(cellB, f"{messageB}")
-
+     print(f"Information pushed to the sheet: {sheetName}")
 
 
 def run(event, context):
