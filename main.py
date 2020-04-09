@@ -1,5 +1,6 @@
 import base64
 import json
+
 from google.cloud import bigquery
 
 project_id = '901492054369'
@@ -41,6 +42,16 @@ def changeLabelsOnSingleTable(datasetId, tableId):
 #       print(f"Adding labels to {table.table_id}")
 #       changeLabelsOnSingleTable(dataset.dataset_id, table.table_id)
 
+def validTable(tableId):
+     invalid_tokens = "$*#"
+     for token in invalid_tokens:
+          if token in tableId:
+               return False
+
+     return True
+
+
+
 def pushInfoToGsheet(sheetName, messageA, messageB=None, cellA="C5", cellB="C6"):
 
      print(f"Reading and update the sheet: {sheetName}")
@@ -59,19 +70,28 @@ def run(event, context):
     Args:
          event (dict): Event payload.
          context (google.cloud.functions.Context): Metadata for the event.
+
+     Reads the pubsub message 
+     and gets the datasetId and tableId 
+     so the Labels from the dataset 
+     can be put on the table 
+     when the table is Valid 
+     and does not already have labels
+
     """
 
-    
 
-    # pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-    pubsub_message = base64.b64decode(event['data'])
-
-
-    data = json.loads(pubsub_message)
-    datasetId = data["resource"]["labels"]["dataset_id"]
-    tableId = data["protoPayload"]["resourceName"].split("/tables/")[1]
+     # pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+     pubsub_message = base64.b64decode(event['data'])
 
 
-       
-    changeLabelsOnSingleTable(datasetId, tableId)
+     data = json.loads(pubsub_message)
+     datasetId = data["resource"]["labels"]["dataset_id"]
+     tableId = data["protoPayload"]["resourceName"].split("/tables/")[1]
+
+
+     if validTable(tableId):
+          changeLabelsOnSingleTable(datasetId, tableId)
+     else:
+          print(f"This table ({tableId}) is not valid and will not be processed.")
     
