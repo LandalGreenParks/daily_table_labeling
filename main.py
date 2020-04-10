@@ -16,6 +16,7 @@ gc = gspread.authorize(GoogleCredentials.get_application_default())
 
 
 def changeLabelsOnSingleTable(datasetId, tableId):
+     print(f"Haalt {tableId} op in {datasetId}")
      dataset = client.get_dataset(datasetId)
      table_ref = dataset.table(tableId)
      table = client.get_table(table_ref)
@@ -45,7 +46,7 @@ def changeLabelsOnSingleTable(datasetId, tableId):
 def validTable(tableId):
      invalid_tokens = "$*#"
      for token in invalid_tokens:
-          if token in tableId:
+          if token in tableId or "___tmp___" in tableId:
                return False
 
      return True
